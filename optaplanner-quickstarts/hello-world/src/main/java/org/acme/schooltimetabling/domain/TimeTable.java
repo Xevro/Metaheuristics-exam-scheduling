@@ -28,14 +28,19 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @PlanningSolution
 public class TimeTable {
 
-    @ProblemFactCollectionProperty
+    @PlanningEntityCollectionProperty
     @ValueRangeProvider(id = "timeslotRange")
     private List<Timeslot> timeslotList;
+
+    //@ProblemFactCollectionProperty
+    //@ValueRangeProvider(id = "roomRange")
+    //private List<Room> roomList;
+
     @ProblemFactCollectionProperty
-    @ValueRangeProvider(id = "roomRange")
-    private List<Room> roomList;
-    @PlanningEntityCollectionProperty
-    private List<Lesson> lessonList;
+    @ValueRangeProvider(id = "examsRange")
+    private List<Exam> examList;
+
+    private List<Student> studentList;
 
     @PlanningScore
     private HardSoftScore score;
@@ -44,22 +49,22 @@ public class TimeTable {
     public TimeTable() {
     }
 
-    public TimeTable(List<Timeslot> timeslotList, List<Room> roomList, List<Lesson> lessonList) {
+    public TimeTable(List<Timeslot> timeslotList, List<Exam> examList, List<Student> studentList) {
         this.timeslotList = timeslotList;
-        this.roomList = roomList;
-        this.lessonList = lessonList;
+        this.examList = examList;
+        this.studentList = studentList;
     }
 
     public List<Timeslot> getTimeslotList() {
         return timeslotList;
     }
 
-    public List<Room> getRoomList() {
-        return roomList;
+    public List<Exam> getExamList() {
+        return examList;
     }
 
-    public List<Lesson> getLessonList() {
-        return lessonList;
+    public List<Student> getStudentList() {
+        return studentList;
     }
 
     public HardSoftScore getScore() {

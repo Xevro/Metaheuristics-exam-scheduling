@@ -16,14 +16,24 @@
 
 package org.acme.schooltimetabling.domain;
 
+import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.variable.PlanningVariable;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+@PlanningEntity
 public class Timeslot {
 
-    private final DayOfWeek dayOfWeek;
-    private final LocalTime startTime;
-    private final LocalTime endTime;
+    @PlanningVariable
+    private int ID;
+    private DayOfWeek dayOfWeek;
+    private LocalTime startTime;
+    private LocalTime endTime;
+
+    public Timeslot(int ID){
+        this.ID  = ID;
+    }
 
     public Timeslot(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
         this.dayOfWeek = dayOfWeek;
@@ -38,6 +48,14 @@ public class Timeslot {
     @Override
     public String toString() {
         return dayOfWeek + " " + startTime;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int id) {
+        ID = id;
     }
 
     public DayOfWeek getDayOfWeek() {

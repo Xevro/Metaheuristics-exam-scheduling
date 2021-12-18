@@ -31,7 +31,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[] {
                 // Hard constraints
-                roomConflict(constraintFactory),
+               // roomConflict(constraintFactory),
              //   teacherConflict(constraintFactory),
              //   studentGroupConflict(constraintFactory),
                 // Soft constraints
@@ -40,7 +40,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
                // studentGroupSubjectVariety(constraintFactory)
         };
     }
-
+/*
    Constraint roomConflict(ConstraintFactory constraintFactory) {
         // A room can accommodate at most one lesson at the same time.
         return constraintFactory
@@ -53,7 +53,7 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
                 // ... and penalize each pair with a hard weight.
                 .penalize("Room conflict", HardSoftScore.ONE_HARD);
     }
-/*
+
     Constraint teacherConflict(ConstraintFactory constraintFactory) {
         // A teacher can teach at most one lesson at the same time.
         return constraintFactory

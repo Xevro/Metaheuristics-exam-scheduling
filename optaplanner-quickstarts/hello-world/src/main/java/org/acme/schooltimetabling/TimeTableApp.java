@@ -19,16 +19,11 @@ package org.acme.schooltimetabling;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import org.acme.schooltimetabling.domain.Lesson;
-import org.acme.schooltimetabling.domain.Room;
-import org.acme.schooltimetabling.domain.TimeTable;
-import org.acme.schooltimetabling.domain.Timeslot;
+import org.acme.schooltimetabling.data.DataReader;
+import org.acme.schooltimetabling.domain.*;
 import org.acme.schooltimetabling.solver.TimeTableConstraintProvider;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
@@ -43,24 +38,30 @@ public class TimeTableApp {
     public static void main(String[] args) {
         SolverFactory<TimeTable> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(TimeTable.class)
-                .withEntityClasses(Lesson.class)
+                .withEntityClasses(Exam.class)
+                        .withEntityClasses(Student.class)
                 .withConstraintProviderClass(TimeTableConstraintProvider.class)
                 // The solver runs only for 5 seconds on this small dataset.
                 // It's recommended to run for at least 5 minutes ("5m") otherwise.
                 .withTerminationSpentLimit(Duration.ofSeconds(5)));
 
         // Load the problem
-        TimeTable problem = generateDemoData();
+        DataReader d = DataReader.main();
+
+        List<Exam> examList = new LinkedList<>(d.getExams().values());
+        List<Student>  studentList = new LinkedList<>(d.getStudents().values());
+
+        TimeTable problem = new TimeTable(d.getTimeslots(), examList, studentList);
 
         // Solve the problem
         Solver<TimeTable> solver = solverFactory.buildSolver();
         TimeTable solution = solver.solve(problem);
 
         // Visualize the solution
-        printTimetable(solution);
+       // printTimetable(solution);
     }
 
-    public static TimeTable generateDemoData() {
+  /*  public static TimeTable generateDemoData() {
         List<Timeslot> timeslotList = new ArrayList<>(10);
         timeslotList.add(new Timeslot(DayOfWeek.MONDAY, LocalTime.of(8, 30), LocalTime.of(9, 30)));
         timeslotList.add(new Timeslot(DayOfWeek.MONDAY, LocalTime.of(9, 30), LocalTime.of(10, 30)));
@@ -105,25 +106,25 @@ public class TimeTableApp {
 
         return new TimeTable(timeslotList, roomList, lessonList);
     }
-
-    private static void printTimetable(TimeTable timeTable) {
+*/
+  /*  private static void printTimetable(TimeTable timeTable) {
         LOGGER.info("");
-        List<Room> roomList = timeTable.getRoomList();
-        List<Lesson> lessonList = timeTable.getLessonList();
-        Map<Timeslot, Map<Room, List<Lesson>>> lessonMap = lessonList.stream()
-                .filter(lesson -> lesson.getTimeslot() != null && lesson.getRoom() != null)
-                .collect(Collectors.groupingBy(Lesson::getTimeslot, Collectors.groupingBy(Lesson::getRoom)));
+        List<Exam> roomList = timeTable.getExamList();
+        List<Student> lessonList = timeTable.getStudentList();
+        Map<Timeslot, Map<Exam, List<Student>>> lessonMap = lessonList.stream()
+                .filter(lesson -> lesson.getExamIds() != null && lesson.getExamIds() != null)
+                .collect(Collectors.groupingBy(Student::getExamIds, Collectors.groupingBy(Student::getExamIds)));
         LOGGER.info("|            | " + roomList.stream()
                 .map(room -> String.format("%-10s", room.getName())).collect(Collectors.joining(" | ")) + " |");
         LOGGER.info("|" + "------------|".repeat(roomList.size() + 1));
         for (Timeslot timeslot : timeTable.getTimeslotList()) {
-            List<List<Lesson>> cellList = roomList.stream()
+            List<List<Student>> cellList = roomList.stream()
                     .map(room -> {
-                        Map<Room, List<Lesson>> byRoomMap = lessonMap.get(timeslot);
+                        Map<Exam, List<Student>> byRoomMap = lessonMap.get(timeslot);
                         if (byRoomMap == null) {
                             return Collections.<Lesson>emptyList();
                         }
-                        List<Lesson> cellLessonList = byRoomMap.get(room);
+                        List<Student> cellLessonList = byRoomMap.get(room);
                         if (cellLessonList == null) {
                             return Collections.<Lesson>emptyList();
                         }
@@ -144,21 +145,21 @@ public class TimeTableApp {
                     + " |");
             LOGGER.info("|            | "
                     + cellList.stream().map(cellLessonList -> String.format("%-10s",
-                            cellLessonList.stream().map(Lesson::getStudentGroup).collect(Collectors.joining(", "))))
+                            cellLessonList.stream().map(Student::getExamIds).collect(Collectors.joining(", "))))
                             .collect(Collectors.joining(" | "))
                     + " |");
             LOGGER.info("|" + "------------|".repeat(roomList.size() + 1));
         }
-        List<Lesson> unassignedLessons = lessonList.stream()
-                .filter(lesson -> lesson.getTimeslot() == null || lesson.getRoom() == null)
+        List<Student> unassignedLessons = lessonList.stream()
+                .filter(lesson -> lesson.getExamIds() == null)
                 .collect(Collectors.toList());
         if (!unassignedLessons.isEmpty()) {
             LOGGER.info("");
             LOGGER.info("Unassigned lessons");
-            for (Lesson lesson : unassignedLessons) {
-                LOGGER.info("  " + lesson.getSubject() + " - " + lesson.getTeacher() + " - " + lesson.getStudentGroup());
+            for (Student lesson : unassignedLessons) {
+                LOGGER.info("  " + lesson.getExamIds());
             }
         }
     }
-
+*/
 }

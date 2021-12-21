@@ -16,22 +16,18 @@
 
 package org.acme.schooltimetabling;
 
+import java.time.Duration;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.acme.schooltimetabling.data.DataReader;
-import org.acme.schooltimetabling.domain.Exam;
-import org.acme.schooltimetabling.domain.ExamTable;
-import org.acme.schooltimetabling.domain.Student;
+import org.acme.schooltimetabling.domain.*;
 import org.acme.schooltimetabling.solver.TimeTableConstraintProvider;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 public class TimeTableApp {
 
@@ -59,20 +55,18 @@ public class TimeTableApp {
     }
 
     public static ExamTable generateDemoData() {
-        //List<Timeslot> timeslotList = new ArrayList<>(10);
+        //    List<Timeslot> timeslotList = new ArrayList<>(10);
         DataReader parser = new DataReader("benchmarks/lse-f-91.crs", "benchmarks/lse-f-91.stu");
         HashMap<Integer, Exam> exams = parser.getExams();
 
         List<Exam> examList = new LinkedList<>();
-        List<Student> studentList = new LinkedList<>();
 
         Set<Integer> keys = exams.keySet();
         for (Integer i : keys) {
             Exam exam = exams.get(i);
             examList.add(exam);
-            System.out.println(exam.getID() + " " + exam.getSID());
+            //System.out.println(exam.getID() + " " + exam.getSID());
         }
-
         keys = parser.getStudents().keySet();
         for (Integer i : keys) {
             Student student = parser.getStudents().get(i);
@@ -97,8 +91,7 @@ public class TimeTableApp {
         timeslotList.add(new Timeslot(DayOfWeek.TUESDAY, LocalTime.of(10, 30), LocalTime.of(11, 30)));
         timeslotList.add(new Timeslot(DayOfWeek.TUESDAY, LocalTime.of(13, 30), LocalTime.of(14, 30)));
         timeslotList.add(new Timeslot(DayOfWeek.TUESDAY, LocalTime.of(14, 30), LocalTime.of(15, 30)));
-*/
-        /*
+*//*
         List<Room> roomList = new ArrayList<>(3);
         roomList.add(new Room(1, "Room A"));
         roomList.add(new Room(2, "Room B"));
@@ -127,8 +120,9 @@ public class TimeTableApp {
         lessonList.add(new Lesson(id++, "History", "I. Jones", "10th grade"));
         lessonList.add(new Lesson(id++, "English", "P. Cruz", "10th grade"));
         lessonList.add(new Lesson(id++, "Spanish", "P. Cruz", "10th grade"));
-*/
-        return new ExamTable(timeslotList, roomList, lessonList);
+
+        return new TimeTable(timeslotList, roomList, lessonList);*/
+        return null;
     }
 
     /*private static void printTimetable(ExamTable timeTable) {

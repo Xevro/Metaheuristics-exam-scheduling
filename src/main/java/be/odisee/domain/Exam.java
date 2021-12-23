@@ -16,7 +16,7 @@ public class Exam implements Comparable<Exam> {
     private int id;
 
     @PlanningVariable(valueRangeProviderRefs = "timeslotRange")
-    private Timeslot timeslot;
+    private TimeSlot timeslot;
 
     private Set<Student> students;
     private int capacity;
@@ -37,11 +37,11 @@ public class Exam implements Comparable<Exam> {
         return id;
     }
 
-    public Timeslot getTimeslot() {
+    public TimeSlot getTimeslot() {
         return timeslot;
     }
 
-    public void setTimeslot(Timeslot timeslot) {
+    public void setTimeslot(TimeSlot timeslot) {
         this.timeslot = timeslot;
     }
 

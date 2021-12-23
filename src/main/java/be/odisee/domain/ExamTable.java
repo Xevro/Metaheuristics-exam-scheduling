@@ -29,7 +29,7 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 public class ExamTable {
     @ProblemFactCollectionProperty
     @ValueRangeProvider(id = "timeslotRange")
-    private List<Timeslot> timeslotList;
+    private List<TimeSlot> timeslotList;
 
     @PlanningEntityCollectionProperty
     private List<Exam> examList;
@@ -40,12 +40,12 @@ public class ExamTable {
     public ExamTable() {
     }
 
-    public ExamTable(List<Timeslot> timeslotList, List<Exam> examList) {
+    public ExamTable(List<TimeSlot> timeslotList, List<Exam> examList) {
         this.timeslotList = timeslotList;
         this.examList = examList;
     }
 
-    public List<Timeslot> getTimeslotList() {
+    public List<TimeSlot> getTimeslotList() {
         return timeslotList;
     }
 

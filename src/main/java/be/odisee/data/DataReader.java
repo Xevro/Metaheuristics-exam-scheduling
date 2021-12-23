@@ -12,7 +12,7 @@ public class DataReader {
     private final File sFile;
     private List<Student> students;
     private List<Exam> exams;
-    private List<Timeslot> timeslots;
+    private List<TimeSlot> timeslots;
     private final String eFileName;
     private final String sFileName;
 
@@ -41,7 +41,7 @@ public class DataReader {
                         int numberOfTimeSlots = sc.nextInt();
                         timeslots = new ArrayList<>();
                         for (int i = 0; i < numberOfTimeSlots; i++) {
-                            timeslots.add(new Timeslot(i));
+                            timeslots.add(new TimeSlot(i));
                             // Lijst van tijdsloten (0-17) - timeslots.get(i).getID()
                             // System.out.println("tijdslot: " + timeslots.get(i).getID());
                         }
@@ -132,11 +132,11 @@ public class DataReader {
         this.exams = exams;
     }
 
-    public List<Timeslot> getTimeslots() {
+    public List<TimeSlot> getTimeslots() {
         return timeslots;
     }
 
-    public void setTimeslots(List<Timeslot> timeslots) {
+    public void setTimeslots(List<TimeSlot> timeslots) {
         this.timeslots = timeslots;
     }
 

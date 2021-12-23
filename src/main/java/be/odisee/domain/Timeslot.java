@@ -1,10 +1,10 @@
 package be.odisee.domain;
 
-public class Timeslot {
+public class TimeSlot {
 
     private final int id;
 
-    public Timeslot(int id) {
+    public TimeSlot(int id) {
         this.id = id;
     }
 

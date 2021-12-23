@@ -36,8 +36,6 @@ public class TimeTableApp {
         SolverFactory<ExamTable> solverFactory = SolverFactory.create(new SolverConfig()
                 .withSolutionClass(ExamTable.class)
                 .withEntityClasses(Exam.class)
-                .withEntityClasses(Student.class)
-                .withEntityClasses(Timeslot.class)
                 .withConstraintProviderClass(TimeTableConstraintProvider.class)
                 // The solver runs only for 5 seconds on this small dataset.
                 // It's recommended to run for at least 5 minutes ("5m") otherwise.
@@ -49,6 +47,9 @@ public class TimeTableApp {
         Solver<ExamTable> solver = solverFactory.buildSolver();
         ExamTable solution = solver.solve(problem);
 
+        for (Exam e : solution.getExamList()) {
+            System.out.println(e.getTimeslot());
+        }
         // Visualize the solution
         //  printTimetable(solution);
     }
@@ -56,7 +57,7 @@ public class TimeTableApp {
     public static ExamTable generateDemoData() {
         DataReader parser = new DataReader("benchmarks/lse-f-91.crs", "benchmarks/lse-f-91.stu");
         List<Exam> exams = parser.getExams();
-        List<Timeslot> timeslots = parser.getTimeslots();
+        List<TimeSlot> timeslots = parser.getTimeslots();
 
         return new ExamTable(timeslots, exams);
     }

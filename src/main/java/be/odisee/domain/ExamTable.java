@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package odisee.domain;
+package be.odisee.domain;
 
 import java.util.List;
 
+import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty;
@@ -26,18 +27,16 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 @PlanningSolution
 public class ExamTable {
-
     @ProblemFactCollectionProperty
     @ValueRangeProvider(id = "timeslotRange")
     private List<Timeslot> timeslotList;
-    @ProblemFactCollectionProperty
-    @ValueRangeProvider(id = "examRange")
+
+    @PlanningEntityCollectionProperty
     private List<Exam> examList;
 
     @PlanningScore
     private HardSoftScore score;
 
-    // No-arg constructor required for OptaPlanner
     public ExamTable() {
     }
 
@@ -45,10 +44,6 @@ public class ExamTable {
         this.timeslotList = timeslotList;
         this.examList = examList;
     }
-
-    // ************************************************************************
-    // Getters and setters
-    // ************************************************************************
 
     public List<Timeslot> getTimeslotList() {
         return timeslotList;
@@ -61,5 +56,4 @@ public class ExamTable {
     public HardSoftScore getScore() {
         return score;
     }
-
 }

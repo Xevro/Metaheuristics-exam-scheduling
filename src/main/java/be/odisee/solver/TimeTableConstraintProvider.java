@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package odisee.solver;
+package be.odisee.solver;
 
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.Constraint;

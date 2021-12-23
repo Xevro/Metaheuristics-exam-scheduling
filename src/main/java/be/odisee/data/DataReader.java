@@ -1,6 +1,6 @@
-package odisee.data;
+package be.odisee.data;
 
-import odisee.domain.*;
+import be.odisee.domain.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,8 +10,8 @@ public class DataReader {
 
     private final File eFile;
     private final File sFile;
-    private HashMap<Integer, Student> students;
-    private HashMap<Integer, Exam> exams;
+    private List<Student> students;
+    private List<Exam> exams;
     private List<Timeslot> timeslots;
     private final String eFileName;
     private final String sFileName;
@@ -28,8 +28,6 @@ public class DataReader {
 
     private void readTimeSlots() {
         if (eFileName.endsWith(".crs")) {
-            //exams
-            //read number of timeslots
             File timeSlotFile = new File("benchmarks/number_of_timeslots.txt");
             Scanner timeslotScanner;
             try {
@@ -37,14 +35,15 @@ public class DataReader {
                 while (timeslotScanner.hasNextLine()) {
                     String nextLine = timeslotScanner.nextLine();
                     if (nextLine.startsWith(eFileName)) {
-                        //ok goede gevonden
                         Scanner sc = new Scanner(nextLine);
                         sc.useDelimiter(":");
                         sc.next();
                         int numberOfTimeSlots = sc.nextInt();
-                        timeslots = new ArrayList<Timeslot>();
+                        timeslots = new ArrayList<>();
                         for (int i = 0; i < numberOfTimeSlots; i++) {
                             timeslots.add(new Timeslot(i));
+                            // Lijst van tijdsloten (0-17) - timeslots.get(i).getID()
+                            // System.out.println("tijdslot: " + timeslots.get(i).getID());
                         }
                         break;
                     }
@@ -56,21 +55,23 @@ public class DataReader {
         }
     }
 
-	private void readExams() {
+
+    private void readExams() {
         Scanner scanner;
         try {
             scanner = new Scanner(eFile);
-            this.exams = new HashMap<Integer, Exam>();
+            this.exams = new LinkedList<Exam>();
             while (scanner.hasNextLine()) {
                 String nextLine = scanner.nextLine();
                 Scanner sc = new Scanner(nextLine);
                 sc.useDelimiter(" ");
                 int examID = sc.nextInt();
                 int aantal = sc.nextInt();
-                Exam exam = new Exam(examID); //, aantal
-                List<Integer> sid = new ArrayList<Integer>();
-                exam.setSID(sid);
-                this.exams.put(exam.getID(), exam);
+                // System.out.println("examen:" + examID);
+                Exam exam = new Exam(examID, aantal); // geen aantal nodig - examen capaciteit
+                Set<Student> sid = new TreeSet<>();
+                exam.setStudents(sid);
+                this.exams.add(exam); // exam.getID(),
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -78,11 +79,10 @@ public class DataReader {
         }
     }
 
-	private void readStudents() {
+    private void readStudents() {
         if (sFileName.endsWith(".stu")) {
-            //students
             Scanner scanner;
-            students = new HashMap<Integer, Student>();
+            students = new LinkedList<Student>();
             try {
                 scanner = new Scanner(sFile);
                 int teller = 0;
@@ -91,17 +91,21 @@ public class DataReader {
                     String nextLine = scanner.nextLine();
                     Scanner sc = new Scanner(nextLine);
                     sc.useDelimiter(" ");
-                    Student student = new Student();
-                    List<Integer> examIDList = new ArrayList<Integer>();
+                    Student student = new Student(teller);
+                    Set<Exam> examIDList = new TreeSet<>();
+
                     while (sc.hasNext()) {
-                        examIDList.add(sc.nextInt());
+                        Exam ex = new Exam(sc.nextInt(), teller);
+                        examIDList.add(ex);
                     }
-                    for (Integer e : examIDList) {
-                        Exam exam = exams.get(e);
-                        //exam.getSID().add(student.getID());
+                    for (Exam e : examIDList) {
+                        Exam exam = exams.get(e.getId() -1);
+                        exam.addSID(student);
                     }
-                    student.setExamIds(examIDList);
-                    students.put(teller, student);
+                    student.setExams(examIDList);
+
+                    //System.out.println(student.getExamIds());
+                    students.add(student); // teller, student
 
                 }
             } catch (FileNotFoundException e) {
@@ -112,19 +116,19 @@ public class DataReader {
     }
 
 
-    public HashMap<Integer, Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(HashMap<Integer, Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 
-    public HashMap<Integer, Exam> getExams() {
+    public List<Exam> getExams() {
         return exams;
     }
 
-    public void setExams(HashMap<Integer, Exam> exams) {
+    public void setExams(List<Exam> exams) {
         this.exams = exams;
     }
 
@@ -136,8 +140,7 @@ public class DataReader {
         this.timeslots = timeslots;
     }
 
-    public static void main(String... aArgs) {
-
+   /* public static void main(String... aArgs) {
         DataReader parser = new DataReader("benchmarks/lse-f-91.crs", "benchmarks/lse-f-91.stu");
         HashMap<Integer, Exam> exams = parser.getExams();
         Set<Integer> keys = exams.keySet();
@@ -148,7 +151,7 @@ public class DataReader {
         keys = parser.getStudents().keySet();
         for (Integer i : keys) {
             Student student = parser.getStudents().get(i);
-            //System.out.println(student.getID());
+            System.out.println(student.getID());
         }
         keys = exams.keySet();
         int totaal = 0;
@@ -157,6 +160,6 @@ public class DataReader {
             totaal += exam.getSID().size();
         }
         System.out.println(totaal);
-    }
+    }*/
 
 }

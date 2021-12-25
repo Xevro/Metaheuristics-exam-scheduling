@@ -14,6 +14,6 @@ public class TimeSlot {
 
     @Override
     public String toString() {
-        return "TimeSlot{" + getId() + "}";
+        return "TimeSlot " + getId() + ": ";
     }
 }

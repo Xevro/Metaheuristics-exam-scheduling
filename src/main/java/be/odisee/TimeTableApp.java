@@ -18,6 +18,7 @@ package be.odisee;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import be.odisee.data.DataReader;
 import be.odisee.domain.*;
@@ -47,20 +48,8 @@ public class TimeTableApp {
         Solver<ExamTable> solver = solverFactory.buildSolver();
         ExamTable solution = solver.solve(problem);
 
-        for (TimeSlot e : solution.getTimeslotList()) {
-           // System.out.println(e.getId() + " " + e.getTimeslot().getId());
-        }
 
-        for (TimeSlot timeSlot : solution.getTimeslotList()) {
-            System.out.println(timeSlot.toString());
-            for (Exam e : solution.getExamList()) {
-                if (e.getTimeslot().getId() == timeSlot.getId()) {
-                    System.out.println(e.getStudents());
-                }
-            }
-        }
-        // Visualize the solution
-        //  printTimetable(solution);
+        printExamTable(solution);
     }
 
     public static ExamTable generateDemoData() {
@@ -71,59 +60,15 @@ public class TimeTableApp {
         return new ExamTable(timeslots, exams);
     }
 
-    /*private static void printTimetable(ExamTable timeTable) {
-        LOGGER.info("");
-        List<Room> roomList = timeTable.getRoomList();
-        List<Lesson> lessonList = timeTable.getLessonList();
-        Map<Timeslot, Map<Room, List<Lesson>>> lessonMap = lessonList.stream()
-                .filter(lesson -> lesson.getTimeslot() != null && lesson.getRoom() != null)
-                .collect(Collectors.groupingBy(Lesson::getTimeslot, Collectors.groupingBy(Lesson::getRoom)));
-        LOGGER.info("|            | " + roomList.stream()
-                .map(room -> String.format("%-10s", room.getName())).collect(Collectors.joining(" | ")) + " |");
-        LOGGER.info("|" + "------------|".repeat(roomList.size() + 1));
-        for (Timeslot timeslot : timeTable.getTimeslotList()) {
-            List<List<Lesson>> cellList = roomList.stream()
-                    .map(room -> {
-                        Map<Room, List<Lesson>> byRoomMap = lessonMap.get(timeslot);
-                        if (byRoomMap == null) {
-                            return Collections.<Lesson>emptyList();
-                        }
-                        List<Lesson> cellLessonList = byRoomMap.get(room);
-                        if (cellLessonList == null) {
-                            return Collections.<Lesson>emptyList();
-                        }
-                        return cellLessonList;
-                    })
-                    .collect(Collectors.toList());
-
-            LOGGER.info("| " + String.format("%-10s",
-                    timeslot.toString()) + " | "
-                    + cellList.stream().map(cellLessonList -> String.format("%-10s",
-                            cellLessonList.stream().map(Lesson::getSubject).collect(Collectors.joining(", "))))
-                    .collect(Collectors.joining(" | "))
-                    + " |");
-            LOGGER.info("|            | "
-                    + cellList.stream().map(cellLessonList -> String.format("%-10s",
-                            cellLessonList.stream().map(Lesson::getTeacher).collect(Collectors.joining(", "))))
-                    .collect(Collectors.joining(" | "))
-                    + " |");
-            LOGGER.info("|            | "
-                    + cellList.stream().map(cellLessonList -> String.format("%-10s",
-                            cellLessonList.stream().map(Lesson::getStudentGroup).collect(Collectors.joining(", "))))
-                    .collect(Collectors.joining(" | "))
-                    + " |");
-            LOGGER.info("|" + "------------|".repeat(roomList.size() + 1));
-        }
-        List<Lesson> unassignedLessons = lessonList.stream()
-                .filter(lesson -> lesson.getTimeslot() == null || lesson.getRoom() == null)
-                .collect(Collectors.toList());
-        if (!unassignedLessons.isEmpty()) {
-            LOGGER.info("");
-            LOGGER.info("Unassigned lessons");
-            for (Lesson lesson : unassignedLessons) {
-                LOGGER.info("  " + lesson.getSubject() + " - " + lesson.getTeacher() + " - " + lesson.getStudentGroup());
+    private static void printExamTable(ExamTable examTable) {
+        for (TimeSlot timeSlot : examTable.getTimeslotList()) {
+            System.out.println(timeSlot.toString());
+            for (Exam e : examTable.getExamList()) {
+                if (e.getTimeslot().getId() == timeSlot.getId()) {
+                    System.out.println(e);
+                }
             }
         }
-    }*/
-
+        System.out.println("Score:" + examTable.getScore());
+    }
 }

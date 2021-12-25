@@ -27,11 +27,11 @@ public class Student implements Comparable<Student> {
 
     @Override
     public String toString() {
-        return "Student: " + getId();
+        return getId() + "";
     }
 
     @Override
-    public int compareTo(Student that) {
-        return (this.getId() == that.getId()) ? 0 : 1;
+    public int compareTo(Student student) {
+        return (this.getId() == student.getId()) ? 0 : 1;
     }
 }

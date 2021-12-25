@@ -16,6 +16,7 @@
 
 package be.odisee.solver;
 
+import be.odisee.domain.Exam;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
@@ -26,29 +27,22 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
-        return new Constraint[] {
+        return new Constraint[]{
                 // Hard constraints
-               // roomConflict(constraintFactory),
-                //teacherConflict(constraintFactory),
-                //studentGroupConflict(constraintFactory),
+                examConflict(constraintFactory)
                 // Soft constraints
                 //teacherRoomStability(constraintFactory)
         };
     }
 
-    /*Constraint roomConflict(ConstraintFactory constraintFactory) {
-        // A room can accommodate at most one lesson at the same time.
+    Constraint examConflict(ConstraintFactory constraintFactory) {
         return constraintFactory
-                // Select each pair of 2 different lessons ...
-                .forEachUniquePair(Lesson.class,
-                        // ... in the same timeslot ...
-                        Joiners.equal(Lesson::getTimeslot),
-                        // ... in the same room ...
-                        Joiners.equal(Lesson::getRoom))
-                // ... and penalize each pair with a hard weight.
-                .penalize("Room conflict", HardSoftScore.ONE_HARD);
+                .forEachUniquePair(Exam.class,
+                        Joiners.equal(Exam::getTimeslot))
+                .filter((exam1, exam2) -> exam1.getStudents() != exam2.getStudents())
+                .penalize("Exam timeslot Conflict", HardSoftScore.ONE_HARD);
     }
-
+/*
     Constraint teacherConflict(ConstraintFactory constraintFactory) {
         // A teacher can teach at most one lesson at the same time.
         return constraintFactory

@@ -19,8 +19,6 @@ public class Exam implements Comparable<Exam> {
     private TimeSlot timeslot;
 
     private Set<Student> students;
-    private int capacity;
-
 
     // Needed for OptaPlanner planning clone
     public Exam() {
@@ -28,7 +26,6 @@ public class Exam implements Comparable<Exam> {
 
     public Exam(int id, int capacity) {
         this.id = id;
-        this.capacity = capacity;
         this.students = new TreeSet<>();
     }
 
@@ -45,14 +42,6 @@ public class Exam implements Comparable<Exam> {
         this.timeslot = timeslot;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
     public Set<Student> getStudents() {
         return students;
     }
@@ -67,7 +56,10 @@ public class Exam implements Comparable<Exam> {
 
     @Override
     public String toString() {
-        return "Exam{" + String.format("%-4s", getId() + ",") + " [" + getStudents().stream().map(s -> "" + s.getId()).collect(Collectors.joining(",")) + "]}";
+        return "Examen: " +
+                String.format("%-4s", this.getId()) + " " +
+                "Studenten: " + this.getStudents().stream().map(student -> "" +
+                student.getId()).collect(Collectors.joining(", "));
     }
 
     @Override

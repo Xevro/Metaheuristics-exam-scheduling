@@ -47,8 +47,17 @@ public class TimeTableApp {
         Solver<ExamTable> solver = solverFactory.buildSolver();
         ExamTable solution = solver.solve(problem);
 
-        for (Exam e : solution.getExamList()) {
-            System.out.println(e.getTimeslot());
+        for (TimeSlot e : solution.getTimeslotList()) {
+           // System.out.println(e.getId() + " " + e.getTimeslot().getId());
+        }
+
+        for (TimeSlot timeSlot : solution.getTimeslotList()) {
+            System.out.println(timeSlot.toString());
+            for (Exam e : solution.getExamList()) {
+                if (e.getTimeslot().getId() == timeSlot.getId()) {
+                    System.out.println(e.getStudents());
+                }
+            }
         }
         // Visualize the solution
         //  printTimetable(solution);

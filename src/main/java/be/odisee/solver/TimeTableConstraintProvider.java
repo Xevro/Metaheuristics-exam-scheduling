@@ -42,31 +42,13 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
                 .filter((exam1, exam2) -> exam1.getStudents() != exam2.getStudents())
                 .penalize("Exam timeslot Conflict", HardSoftScore.ONE_HARD);
     }
-/*
-    Constraint teacherConflict(ConstraintFactory constraintFactory) {
-        // A teacher can teach at most one lesson at the same time.
-        return constraintFactory
-                .forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getTimeslot),
-                        Joiners.equal(Lesson::getTeacher))
-                .penalize("Teacher conflict", HardSoftScore.ONE_HARD);
-    }
-
-    Constraint studentGroupConflict(ConstraintFactory constraintFactory) {
-        // A student can attend at most one lesson at the same time.
-        return constraintFactory
-                .forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getTimeslot),
-                        Joiners.equal(Lesson::getStudentGroup))
-                .penalize("Student group conflict", HardSoftScore.ONE_HARD);
-    }
 
     Constraint teacherRoomStability(ConstraintFactory constraintFactory) {
         // A teacher prefers to teach in a single room.
         return constraintFactory
-                .forEachUniquePair(Lesson.class,
-                        Joiners.equal(Lesson::getTeacher))
-                .filter((lesson1, lesson2) -> lesson1.getRoom() != lesson2.getRoom())
-                .penalize("Teacher room stability", HardSoftScore.ONE_SOFT);
-    }*/
+                .forEachUniquePair(Exam.class,
+                        Joiners.equal(Exam::getTimeslot))
+                .filter((lesson1, lesson2) -> lesson1.getStudents() != lesson2.getStudents())
+                .penalize("Teacher room stability", HardSoftScore.ofSoft(16));
+    }
 }

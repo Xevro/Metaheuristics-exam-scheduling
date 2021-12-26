@@ -8,9 +8,7 @@ public class TimeSlot {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id;}
 
     @Override
     public String toString() {

@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class DataReader {
+public class ExamDataReader {
 
     private final File eFile;
     private final File sFile;
@@ -16,7 +16,7 @@ public class DataReader {
     private final String eFileName;
     private final String sFileName;
 
-    public DataReader(String examFileName, String studentsFileName) {
+    public ExamDataReader(String examFileName, String studentsFileName) {
         eFile = new File(examFileName);
         sFile = new File(studentsFileName);
         this.eFileName = eFile.getName();
@@ -42,14 +42,11 @@ public class DataReader {
                         timeslots = new ArrayList<>();
                         for (int i = 0; i < numberOfTimeSlots; i++) {
                             timeslots.add(new TimeSlot(i));
-                            // Lijst van tijdsloten (0-17) - timeslots.get(i).getID()
-                            // System.out.println("tijdslot: " + timeslots.get(i).getID());
                         }
                         break;
                     }
                 }
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -67,11 +64,10 @@ public class DataReader {
                 sc.useDelimiter(" ");
                 int examID = sc.nextInt();
                 int aantal = sc.nextInt();
-                // System.out.println("examen:" + examID);
-                Exam exam = new Exam(examID, aantal); // geen aantal nodig - examen capaciteit
+                Exam exam = new Exam(examID);
                 Set<Student> sid = new TreeSet<>();
                 exam.setStudents(sid);
-                this.exams.add(exam); // exam.getID(),
+                this.exams.add(exam);
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -95,18 +91,15 @@ public class DataReader {
                     Set<Exam> examIDList = new TreeSet<>();
 
                     while (sc.hasNext()) {
-                        Exam ex = new Exam(sc.nextInt(), teller);
+                        Exam ex = new Exam(sc.nextInt());
                         examIDList.add(ex);
                     }
                     for (Exam e : examIDList) {
-                        Exam exam = exams.get(e.getId() -1);
+                        Exam exam = exams.get(e.getId() - 1);
                         exam.addSID(student);
                     }
                     student.setExams(examIDList);
-
-                    //System.out.println(student.getExamIds());
-                    students.add(student); // teller, student
-
+                    students.add(student);
                 }
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
@@ -139,27 +132,4 @@ public class DataReader {
     public void setTimeslots(List<TimeSlot> timeslots) {
         this.timeslots = timeslots;
     }
-
-   /* public static void main(String... aArgs) {
-        DataReader parser = new DataReader("benchmarks/lse-f-91.crs", "benchmarks/lse-f-91.stu");
-        HashMap<Integer, Exam> exams = parser.getExams();
-        Set<Integer> keys = exams.keySet();
-        for (Integer i : keys) {
-            Exam exam = exams.get(i);
-            System.out.println(exam.getID() + " " + exam.getSID());
-        }
-        keys = parser.getStudents().keySet();
-        for (Integer i : keys) {
-            Student student = parser.getStudents().get(i);
-            System.out.println(student.getID());
-        }
-        keys = exams.keySet();
-        int totaal = 0;
-        for (Integer i : keys) {
-            Exam exam = exams.get(i);
-            totaal += exam.getSID().size();
-        }
-        System.out.println(totaal);
-    }*/
-
 }

@@ -70,7 +70,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>${version.exec.plugin}</version>
         <configuration>
-          <mainClass>be.odisee.TimeTableApp</mainClass>
+          <mainClass>be.odisee.ExamTableApp</mainClass>
         </configuration>
       </plugin>
     </plugins>

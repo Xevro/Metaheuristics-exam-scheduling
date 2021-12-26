@@ -24,7 +24,7 @@ public class Exam implements Comparable<Exam> {
     public Exam() {
     }
 
-    public Exam(int id, int capacity) {
+    public Exam(int id) {
         this.id = id;
         this.students = new TreeSet<>();
     }
@@ -56,14 +56,14 @@ public class Exam implements Comparable<Exam> {
 
     @Override
     public String toString() {
-        return "Examen: " +
+        return "Examen nr: " +
                 String.format("%-4s", this.getId()) + " " +
                 "Studenten: " + this.getStudents().stream().map(student -> "" +
                 student.getId()).collect(Collectors.joining(", "));
     }
 
     @Override
-    public int compareTo(Exam that) {
-        return (this.getId() == that.getId()) ? 0 : 1;
+    public int compareTo(Exam exam) {
+        return (this.getId() == exam.getId()) ? 0 : 1;
     }
 }

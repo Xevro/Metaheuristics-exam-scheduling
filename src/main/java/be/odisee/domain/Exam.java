@@ -5,20 +5,19 @@ import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
+import java.util.LinkedList;
+import java.util.List;
 
 @PlanningEntity
-public class Exam implements Comparable<Exam> {
+public class Exam {
 
     @PlanningId
     private int id;
 
-    @PlanningVariable(valueRangeProviderRefs = "timeslotRange")
+    @PlanningVariable(valueRangeProviderRefs = "timeSlotRange")
     private TimeSlot timeslot;
 
-    private Set<Student> students;
+    private List<Student> students;
 
     // Needed for OptaPlanner planning clone
     public Exam() {
@@ -26,9 +25,8 @@ public class Exam implements Comparable<Exam> {
 
     public Exam(int id) {
         this.id = id;
-        this.students = new TreeSet<>();
+        this.students = new LinkedList<>();
     }
-
 
     public int getId() {
         return id;
@@ -42,28 +40,29 @@ public class Exam implements Comparable<Exam> {
         this.timeslot = timeslot;
     }
 
-    public Set<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void addSID(Student studentID) {
+    public void addStudent(Student studentID) {
         students.add(studentID);
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 
     @Override
     public String toString() {
-        return "Examen nr: " +
-                String.format("%-4s", this.getId()) + " " +
-                "Studenten: " + this.getStudents().stream().map(student -> "" +
-                student.getId()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public int compareTo(Exam exam) {
-        return (this.getId() == exam.getId()) ? 0 : 1;
+        StringBuilder resultString = new StringBuilder("Examen nr: " + String.format("%-4s", this.getId()) + " Studenten: ");
+        int count = 0;
+        for (Student student : this.getStudents()) {
+            count++;
+            resultString.append(student.getId());
+            if (count != this.getStudents().size()) {
+                resultString.append(", ");
+            }
+        }
+        return resultString.toString();
     }
 }

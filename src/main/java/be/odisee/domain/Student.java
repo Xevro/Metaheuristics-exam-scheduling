@@ -1,23 +1,23 @@
 package be.odisee.domain;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedList;
+import java.util.List;
 
-public class Student implements Comparable<Student> {
+public class Student {
 
     private final int id;
-    private Set<Exam> exams;
+    private List<Exam> exams;
 
     public Student(int id) {
         this.id = id;
-        exams = new TreeSet<>();
+        exams = new LinkedList<>();
     }
 
-    public Set<Exam> getExams() {
+    public List<Exam> getExams() {
         return exams;
     }
 
-    public void setExams(Set<Exam> exams) {
+    public void setExams(List<Exam> exams) {
         this.exams = exams;
     }
 
@@ -28,10 +28,5 @@ public class Student implements Comparable<Student> {
     @Override
     public String toString() {
         return getId() + "";
-    }
-
-    @Override
-    public int compareTo(Student student) {
-        return (this.getId() == student.getId()) ? 0 : 1;
     }
 }

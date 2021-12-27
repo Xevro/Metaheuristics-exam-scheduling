@@ -16,7 +16,8 @@
 
 package be.odisee.solver;
 
-import be.odisee.domain.Exam;
+import be.odisee.domain.*;
+
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
@@ -28,27 +29,22 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
-                // Hard constraints
-                examConflict(constraintFactory)
-                // Soft constraints
-                //teacherRoomStability(constraintFactory)
+                studentExamTimeslotConflict(constraintFactory)
         };
     }
 
-    Constraint examConflict(ConstraintFactory constraintFactory) {
-        return constraintFactory
-                .forEachUniquePair(Exam.class,
+    Constraint studentExamTimeslotConflict(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEachUniquePair(Exam.class,
                         Joiners.equal(Exam::getTimeslot))
-                .filter((exam1, exam2) -> exam1.getStudents() != exam2.getStudents())
-                .penalize("Exam timeslot Conflict", HardSoftScore.ONE_HARD);
-    }
-
-    Constraint teacherRoomStability(ConstraintFactory constraintFactory) {
-        // A teacher prefers to teach in a single room.
-        return constraintFactory
-                .forEachUniquePair(Exam.class,
-                        Joiners.equal(Exam::getTimeslot))
-                .filter((lesson1, lesson2) -> lesson1.getStudents() != lesson2.getStudents())
-                .penalize("Teacher room stability", HardSoftScore.ofSoft(16));
+                .filter((exam1, exam2) -> {
+                    int studentCount = 0;
+                    for (Student students : exam1.getStudents()) {
+                        if (exam2.getStudents().contains(students)) {
+                            studentCount++;
+                        }
+                    }
+                    return (studentCount > 0);
+                })
+                .penalize("Student timeslot conflict", HardSoftScore.ONE_HARD);
     }
 }

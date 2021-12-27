@@ -43,23 +43,23 @@ public class ExamTableApp {
     }
 
     public static ExamTableSolution getExamReaderData() {
-        ExamDataReader parser = new ExamDataReader("benchmarks/lse-f-91.crs", "benchmarks/lse-f-91.stu");
-        List<Exam> exams = parser.getExams();
-        List<TimeSlot> timeslots = parser.getTimeslots();
+        ExamDataReader dataReader = new ExamDataReader("benchmarks/lse-f-91.crs", "benchmarks/lse-f-91.stu");
+        List<Exam> exams = dataReader.getExams();
+        List<TimeSlot> timeslots = dataReader.getTimeslots();
 
         return new ExamTableSolution(timeslots, exams);
     }
 
     private static void printExamTable(ExamTableSolution examTable) {
         for (TimeSlot timeSlot : examTable.getTimeslotList()) {
-            System.out.println("");
-            System.out.println(timeSlot.toString());
-            for (Exam e : examTable.getExamList()) {
-                if (e.getTimeslot().getId() == timeSlot.getId()) {
-                    System.out.println(e);
+            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println(timeSlot);
+            for (Exam exam : examTable.getExamList()) {
+                if (exam.getTimeslot().getId() == timeSlot.getId()) {
+                    System.out.println(exam);
                 }
             }
         }
-        System.out.println("Score:" + examTable.getScore());
+        System.out.println("\nScore:" + examTable.getScore());
     }
 }

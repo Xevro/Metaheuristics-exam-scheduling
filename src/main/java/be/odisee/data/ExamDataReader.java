@@ -62,10 +62,10 @@ public class ExamDataReader {
                 String nextLine = scanner.nextLine();
                 Scanner sc = new Scanner(nextLine);
                 sc.useDelimiter(" ");
-                int examID = sc.nextInt();
-                int aantal = sc.nextInt();
-                Exam exam = new Exam(examID);
-                Set<Student> sid = new TreeSet<>();
+                int examId = sc.nextInt();
+                int count = sc.nextInt();
+                Exam exam = new Exam(examId);
+                List<Student> sid = new LinkedList<>();
                 exam.setStudents(sid);
                 this.exams.add(exam);
             }
@@ -81,24 +81,24 @@ public class ExamDataReader {
             students = new LinkedList<Student>();
             try {
                 scanner = new Scanner(sFile);
-                int teller = 0;
+                int count = 0;
                 while (scanner.hasNextLine()) {
-                    teller++;
+                    count++;
                     String nextLine = scanner.nextLine();
                     Scanner sc = new Scanner(nextLine);
                     sc.useDelimiter(" ");
-                    Student student = new Student(teller);
-                    Set<Exam> examIDList = new TreeSet<>();
+                    Student student = new Student(count);
+                    List<Exam> examIdList = new LinkedList<>();
 
                     while (sc.hasNext()) {
                         Exam ex = new Exam(sc.nextInt());
-                        examIDList.add(ex);
+                        examIdList.add(ex);
                     }
-                    for (Exam e : examIDList) {
+                    for (Exam e : examIdList) {
                         Exam exam = exams.get(e.getId() - 1);
-                        exam.addSID(student);
+                        exam.addStudent(student);
                     }
-                    student.setExams(examIDList);
+                    student.setExams(examIdList);
                     students.add(student);
                 }
             } catch (FileNotFoundException e) {
@@ -107,7 +107,6 @@ public class ExamDataReader {
             }
         }
     }
-
 
     public List<Student> getStudents() {
         return students;

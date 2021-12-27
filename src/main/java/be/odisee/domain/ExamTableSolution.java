@@ -28,7 +28,7 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @PlanningSolution
 public class ExamTableSolution {
     @ProblemFactCollectionProperty
-    @ValueRangeProvider(id = "timeslotRange")
+    @ValueRangeProvider(id = "timeSlotRange")
     private List<TimeSlot> timeslotList;
 
     @PlanningEntityCollectionProperty

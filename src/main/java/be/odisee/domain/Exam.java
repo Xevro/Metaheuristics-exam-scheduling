@@ -1,4 +1,3 @@
-
 package be.odisee.domain;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
@@ -15,51 +14,50 @@ public class Exam {
     private int id;
 
     @PlanningVariable(valueRangeProviderRefs = "timeSlotRange")
-    private TimeSlot timeslot;
+    private TimeSlot timeSlot;
 
-    private List<Student> students;
+    private List<Student> studentsList;
 
-    // Needed for OptaPlanner planning clone
     public Exam() {
     }
 
     public Exam(int id) {
         this.id = id;
-        this.students = new LinkedList<>();
+        this.studentsList = new LinkedList<Student>();
     }
 
     public int getId() {
         return id;
     }
 
-    public TimeSlot getTimeslot() {
-        return timeslot;
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 
-    public void setTimeslot(TimeSlot timeslot) {
-        this.timeslot = timeslot;
+    public void setTimeslot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
     }
 
-    public List<Student> getStudents() {
-        return students;
+    public List<Student> getStudentsList() {
+        return studentsList;
     }
 
-    public void addStudent(Student studentID) {
-        students.add(studentID);
+    public void addStudent(Student student) {
+        studentsList.add(student);
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
+    public void setStudentsList(List<Student> studentsList) {
+        this.studentsList = studentsList;
     }
 
     @Override
     public String toString() {
         StringBuilder resultString = new StringBuilder("Examen nr: " + String.format("%-4s", this.getId()) + " Studenten: ");
         int count = 0;
-        for (Student student : this.getStudents()) {
+        for (Student student : this.getStudentsList()) {
             count++;
             resultString.append(student.getId());
-            if (count != this.getStudents().size()) {
+            if (count != this.getStudentsList().size()) {
                 resultString.append(", ");
             }
         }

@@ -51,11 +51,11 @@ public class ExamTableApp {
     }
 
     private static void printExamTable(ExamTableSolution examTable) {
-        for (TimeSlot timeSlot : examTable.getTimeslotList()) {
+        for (TimeSlot timeSlot : examTable.getTimeSlotList()) {
             System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.println(timeSlot);
             for (Exam exam : examTable.getExamList()) {
-                if (exam.getTimeslot().getId() == timeSlot.getId()) {
+                if (exam.getTimeSlot().getId() == timeSlot.getId()) {
                     System.out.println(exam);
                 }
             }

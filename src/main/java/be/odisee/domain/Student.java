@@ -6,19 +6,19 @@ import java.util.List;
 public class Student {
 
     private final int id;
-    private List<Exam> exams;
+    private List<Exam> examsList;
 
     public Student(int id) {
         this.id = id;
-        exams = new LinkedList<>();
+        examsList = new LinkedList<>();
     }
 
-    public List<Exam> getExams() {
-        return exams;
+    public List<Exam> getExamsList() {
+        return examsList;
     }
 
-    public void setExams(List<Exam> exams) {
-        this.exams = exams;
+    public void setExamsList(List<Exam> examsList) {
+        this.examsList = examsList;
     }
 
     public int getId() {
@@ -27,6 +27,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return getId() + "";
+        return "Student: " + getId() + "";
     }
 }

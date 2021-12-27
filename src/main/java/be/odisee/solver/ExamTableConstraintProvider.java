@@ -34,12 +34,11 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
     }
 
     Constraint studentExamTimeslotConflict(ConstraintFactory constraintFactory) {
-        return constraintFactory.forEachUniquePair(Exam.class,
-                        Joiners.equal(Exam::getTimeslot))
+        return constraintFactory.forEachUniquePair(Exam.class, Joiners.equal(Exam::getTimeSlot))
                 .filter((exam1, exam2) -> {
                     int studentCount = 0;
-                    for (Student students : exam1.getStudents()) {
-                        if (exam2.getStudents().contains(students)) {
+                    for (Student student : exam1.getStudentsList()) {
+                        if (exam2.getStudentsList().contains(student)) {
                             studentCount++;
                         }
                     }

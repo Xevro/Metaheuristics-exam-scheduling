@@ -58,6 +58,7 @@ public class ExamDataReader {
         try {
             scanner = new Scanner(eFile);
             this.exams = new LinkedList<Exam>();
+
             while (scanner.hasNextLine()) {
                 String nextLine = scanner.nextLine();
                 Scanner sc = new Scanner(nextLine);
@@ -65,12 +66,10 @@ public class ExamDataReader {
                 int examId = sc.nextInt();
                 int count = sc.nextInt();
                 Exam exam = new Exam(examId);
-                List<Student> sid = new LinkedList<>();
-                exam.setStudents(sid);
+                exam.setStudentsList(new LinkedList<Student>());
                 this.exams.add(exam);
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -88,21 +87,21 @@ public class ExamDataReader {
                     Scanner sc = new Scanner(nextLine);
                     sc.useDelimiter(" ");
                     Student student = new Student(count);
-                    List<Exam> examIdList = new LinkedList<>();
+                    List<Exam> examsList = new LinkedList<>();
 
                     while (sc.hasNext()) {
-                        Exam ex = new Exam(sc.nextInt());
-                        examIdList.add(ex);
+                        Exam newExam = new Exam(sc.nextInt());
+                        examsList.add(newExam);
                     }
-                    for (Exam e : examIdList) {
-                        Exam exam = exams.get(e.getId() - 1);
+
+                    for (Exam ex : examsList) {
+                        Exam exam = exams.get(ex.getId() - 1);
                         exam.addStudent(student);
                     }
-                    student.setExams(examIdList);
+                    student.setExamsList(examsList);
                     students.add(student);
                 }
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

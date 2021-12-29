@@ -90,8 +90,7 @@ public class ExamDataReader {
                     List<Exam> examsList = new LinkedList<>();
 
                     while (sc.hasNext()) {
-                        Exam newExam = new Exam(sc.nextInt());
-                        examsList.add(newExam);
+                        examsList.add(new Exam(sc.nextInt()));
                     }
 
                     for (Exam ex : examsList) {

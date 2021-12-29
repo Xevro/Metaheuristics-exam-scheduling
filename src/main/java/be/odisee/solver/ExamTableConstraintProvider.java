@@ -36,13 +36,14 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
     Constraint studentExamTimeslotConflict(ConstraintFactory constraintFactory) {
         return constraintFactory.forEachUniquePair(Exam.class, Joiners.equal(Exam::getTimeSlot))
                 .filter((exam1, exam2) -> {
-                    int studentCount = 0;
+                    boolean found = false;
                     for (Student student : exam1.getStudentsList()) {
                         if (exam2.getStudentsList().contains(student)) {
-                            studentCount++;
+                            found = true;
+                            break;
                         }
                     }
-                    return (studentCount > 0);
+                    return found; // Student in zelfde examen? true indien in beide examens.
                 })
                 .penalize("Student timeslot conflict", HardSoftScore.ONE_HARD);
     }

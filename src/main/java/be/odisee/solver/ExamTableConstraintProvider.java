@@ -17,14 +17,11 @@
 package be.odisee.solver;
 
 import be.odisee.domain.*;
-
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
 import org.optaplanner.core.api.score.stream.ConstraintProvider;
 import org.optaplanner.core.api.score.stream.Joiners;
-
-import java.util.List;
 
 public class ExamTableConstraintProvider implements ConstraintProvider {
 

@@ -39,7 +39,7 @@ public class ExamTableApp {
         Solver<ExamTableSolution> solver = solverFactory.buildSolver();
         ExamTableSolution solution = solver.solve(problem);
 
-        printExamTable(solution);
+        printExamTableResults(solution);
     }
 
     public static ExamTableSolution getExamReaderData() {
@@ -50,7 +50,7 @@ public class ExamTableApp {
         return new ExamTableSolution(timeslots, exams);
     }
 
-    private static void printExamTable(ExamTableSolution examTable) {
+    private static void printExamTableResults(ExamTableSolution examTable) {
         for (TimeSlot timeSlot : examTable.getTimeSlotList()) {
             System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.println(timeSlot);

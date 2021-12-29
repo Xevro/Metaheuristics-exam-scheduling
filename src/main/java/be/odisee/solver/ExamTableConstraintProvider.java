@@ -24,12 +24,15 @@ import org.optaplanner.core.api.score.stream.ConstraintFactory;
 import org.optaplanner.core.api.score.stream.ConstraintProvider;
 import org.optaplanner.core.api.score.stream.Joiners;
 
+import java.util.List;
+
 public class ExamTableConstraintProvider implements ConstraintProvider {
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
-                studentExamTimeslotConflict(constraintFactory)
+                studentExamTimeslotConflict(constraintFactory),
+                TimeslotsBetweenExamsConflict(constraintFactory)
         };
     }
 
@@ -45,5 +48,37 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
                     return (studentCount > 0);
                 })
                 .penalize("Student timeslot conflict", HardSoftScore.ONE_HARD);
+    }
+
+    Constraint TimeslotsBetweenExamsConflict(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEachUniquePair(Exam.class)
+                .penalize("Timeslots between exams conflict", HardSoftScore.ONE_SOFT, (exam1, exam2) -> {
+                    int scoreCount = 0;
+                    if (exam1.getTimeSlot().getId() != exam2.getTimeSlot().getId()) { // Beide examens vallen in het zelfde tijdslot
+                        for (Student studentExam1 : exam1.getStudentsList()) {
+                            if (exam2.getStudentsList().contains(studentExam1)) {
+                                int timeslotDiff = Math.abs(exam1.getTimeSlot().getId() - exam2.getTimeSlot().getId());
+                                switch (timeslotDiff) {
+                                    case 0:
+                                        scoreCount = 16;
+                                        break;
+                                    case 1:
+                                        scoreCount = 8;
+                                        break;
+                                    case 2:
+                                        scoreCount = 4;
+                                        break;
+                                    case 3:
+                                        scoreCount = 2;
+                                        break;
+                                    case 4:
+                                        scoreCount = 1;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    return scoreCount;
+                });
     }
 }

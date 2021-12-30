@@ -52,7 +52,6 @@ public class ExamDataReader {
         }
     }
 
-
     private void readExams() {
         Scanner scanner;
         try {
@@ -110,23 +109,11 @@ public class ExamDataReader {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
     public List<Exam> getExams() {
         return exams;
     }
-
-    public void setExams(List<Exam> exams) {
-        this.exams = exams;
-    }
-
+    
     public List<TimeSlot> getTimeslots() {
         return timeslots;
-    }
-
-    public void setTimeslots(List<TimeSlot> timeslots) {
-        this.timeslots = timeslots;
     }
 }

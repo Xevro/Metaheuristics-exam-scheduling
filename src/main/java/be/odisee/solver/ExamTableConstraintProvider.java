@@ -28,12 +28,12 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
-                studentExamTimeslotConflict(constraintFactory),
-                TimeslotsBetweenExamsConflict(constraintFactory)
+                studentExamTimeSlotConflict(constraintFactory),
+                timeSlotsBetweenExamsConflict(constraintFactory)
         };
     }
 
-    Constraint studentExamTimeslotConflict(ConstraintFactory constraintFactory) {
+    Constraint studentExamTimeSlotConflict(ConstraintFactory constraintFactory) {
         return constraintFactory.forEachUniquePair(Exam.class, Joiners.equal(Exam::getTimeSlot))
                 .filter((exam1, exam2) -> {
                     boolean found = false;
@@ -48,7 +48,7 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
                 .penalize("Student timeslot conflict", HardSoftScore.ONE_HARD);
     }
 
-    Constraint TimeslotsBetweenExamsConflict(ConstraintFactory constraintFactory) {
+    Constraint timeSlotsBetweenExamsConflict(ConstraintFactory constraintFactory) {
         return constraintFactory.forEachUniquePair(Exam.class)
                 .penalize("Timeslots between exams conflict", HardSoftScore.ONE_SOFT, (exam1, exam2) -> {
                     int scoreCount = 0;
@@ -71,6 +71,8 @@ public class ExamTableConstraintProvider implements ConstraintProvider {
                                         break;
                                     case 4:
                                         scoreCount = 1;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
